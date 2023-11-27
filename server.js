@@ -47,7 +47,7 @@ const menu = () => {
     ])
     .then((response) => {
       console.log(response);
-      switch (response.option) {
+      switch (response.response) {
         case "viewAllDepartments":
           viewDepartments();
           break;
@@ -77,27 +77,29 @@ const menu = () => {
 
 // view all functions
 const viewDepartments = () => {
-  console.log("viewing all departments...");
   db.query("SELECT * FROM department", (err, results) => {
     if (err) throw err;
+    console.log("\nviewing all departments...");
     console.table(results);
   });
   menu();
 };
 
 const viewRoles = () => {
-  console.log("viewing all roles...");
   db.query("SELECT * FROM role", (err, results) => {
     if (err) throw err;
+    console.log("\nviewing all roles...");
     console.table(results);
   });
   menu();
 };
 
 const viewEmployees = () => {
-  console.log("viewing all employees...");
-  if (err) throw err;
-  console.table(results);
+  db.query("SELECT * FROM employee", (err, results) => {
+    if (err) throw err;
+    console.log("\nviewing all employees...");
+    console.table(results);
+  });
   menu();
 };
 
@@ -145,8 +147,10 @@ const addRole = () => {
         type: "list",
         message: "What is the name of the department you are adding?",
         name: "newRoleDepartment",
-        choices: [],
+        choices: db.query(""),
       },
     ])
     .then((response) => {});
 };
+
+menu();
