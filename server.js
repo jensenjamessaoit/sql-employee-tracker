@@ -108,8 +108,45 @@ const addDepartment = () => {
       {
         type: "input",
         message: "What is the name of the department you are adding?",
-        value: "newDepartment",
+        name: "newDepartment",
       },
     ])
-    .then(data);
+    .then((response) => {
+      db.query(
+        "INSERT INTO department ?",
+        [
+          {
+            name: response.newDepartment,
+          },
+        ],
+        (err, results) => {
+          if (err) throw err;
+          console.log("Sucess!! New department added.");
+          menu();
+        }
+      );
+    });
+};
+
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the title of the role you are adding?",
+        name: "newRoleTitle",
+      },
+      {
+        type: "input",
+        message: "What is the salary of this role?",
+        name: "newRoleSalary",
+      },
+      {
+        type: "list",
+        message: "What is the name of the department you are adding?",
+        name: "newRoleDepartment",
+        choices: [],
+      },
+    ])
+    .then((response) => {});
 };
