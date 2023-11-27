@@ -1,0 +1,10 @@
+{
+  "name": "sql-employee-tracker",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "inquirer": "^9.2.12",
+    "mysql2": "^3.6.5"
+  }
+}
