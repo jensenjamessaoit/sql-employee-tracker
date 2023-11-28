@@ -115,12 +115,8 @@ const addDepartment = () => {
     ])
     .then((response) => {
       db.query(
-        "INSERT INTO department ?",
-        [
-          {
-            name: response.newDepartment,
-          },
-        ],
+        "INSERT INTO department (name) VALUES (?)",
+        [response.newDepartment],
         (err, results) => {
           if (err) throw err;
           console.log("Sucess!! New department added.");
@@ -130,7 +126,14 @@ const addDepartment = () => {
     });
 };
 
-const addRole = () => {
+const addRole = async () => {
+  //query roles so user can link it to whichever id matches their chosen role
+  // let roleQuery;
+  // db.query("SELECT * FROM role", (err, results) => {
+  //   if (err) throw err;
+  //   roleQuery = results;
+  // });
+  // console.log(roleQuery);
   inquirer
     .prompt([
       {
@@ -144,13 +147,33 @@ const addRole = () => {
         name: "newRoleSalary",
       },
       {
-        type: "list",
-        message: "What is the name of the department you are adding?",
+        type: "input",
+        message:
+          "What is the ID of the department you are adding the role into?",
         name: "newRoleDepartment",
-        choices: db.query(""),
       },
     ])
-    .then((response) => {});
+    .then((response) => {
+      // console.log(response.newRoleTitle);
+      // console.log(response.newRoleSalary);
+      // console.log(response.newRoleDepartment);
+
+      db.query(
+        "INSERT INTO role (title, salary, department_id) VALUES ?",
+        response,
+        // [
+        //   // response,
+        //   response.newRoleTitle,
+        //   response.newRoleSalary,
+        //   response.newRoleDepartment,
+        // ],
+        (err, results) => {
+          if (err) throw err;
+          console.log("Success!! New role added.");
+          menu();
+        }
+      );
+    });
 };
 
 menu();
