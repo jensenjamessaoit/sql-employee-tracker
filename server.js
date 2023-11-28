@@ -126,14 +126,7 @@ const addDepartment = () => {
     });
 };
 
-const addRole = async () => {
-  //query roles so user can link it to whichever id matches their chosen role
-  // let roleQuery;
-  // db.query("SELECT * FROM role", (err, results) => {
-  //   if (err) throw err;
-  //   roleQuery = results;
-  // });
-  // console.log(roleQuery);
+const addRole = () => {
   inquirer
     .prompt([
       {
@@ -154,22 +147,88 @@ const addRole = async () => {
       },
     ])
     .then((response) => {
-      // console.log(response.newRoleTitle);
-      // console.log(response.newRoleSalary);
-      // console.log(response.newRoleDepartment);
-
       db.query(
-        "INSERT INTO role (title, salary, department_id) VALUES ?",
-        response,
-        // [
-        //   // response,
-        //   response.newRoleTitle,
-        //   response.newRoleSalary,
-        //   response.newRoleDepartment,
-        // ],
+        "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
+        [
+          // response,
+          response.newRoleTitle,
+          response.newRoleSalary,
+          response.newRoleDepartment,
+        ],
         (err, results) => {
           if (err) throw err;
           console.log("Success!! New role added.");
+          menu();
+        }
+      );
+    });
+};
+
+const addEmployee = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the new employee's first name?",
+        name: "newEmpFirst",
+      },
+      {
+        type: "input",
+        message: "What is the new employee's last name?",
+        name: "newEmpLast",
+      },
+      {
+        type: "input",
+        message: "What is the ID of the new employee's role?",
+        name: "newEmpRole",
+      },
+      {
+        type: "input",
+        message: "What is the ID of the new employee's manager?",
+        name: "newEmpManager",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
+        [
+          response.newEmpFirst,
+          response.newEmpLast,
+          response.newEmpRole,
+          response.newEmpManager,
+        ],
+        (err, results) => {
+          if (err) throw err;
+          console.log("Success!! New employee added.");
+          menu();
+        }
+      );
+    });
+};
+
+const updateEmployeeRole = () => {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message:
+          "What is the ID of the employee whose role you wish to change?",
+        name: "empId",
+      },
+      {
+        type: "input",
+        message:
+          "What is the ID of the role you wish to change this employee to?",
+        name: "roleId",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        "UPDATE employee SET role_id = ? WHERE id = ?",
+        [parseInt(response.roleId), parseInt(response.empId)],
+        (err, results) => {
+          if (err) throw err;
+          console.log("Success!! Employee role updated");
           menu();
         }
       );
